@@ -36,8 +36,18 @@ Decimal::Decimal(sint i) {
     if(negative)
         i = -i;
 
-    if(i <= 0x7FFFFF) {
+    if(SYLPH_LIKELY(i <= 0x7FFFFF)) {
         data = i;
+        if(negative)
+            data |= 0x80000000;
+    } else {
+        suint ctr;
+        while(i > 0x7FFFFF) {
+            ++ctr;
+            i >>= 1;
+        }
+        ctr <<= 23;
+        data = ctr | i;
         if(negative)
             data |= 0x80000000;
     }
