@@ -37,11 +37,14 @@ Decimal::Decimal(sint i) {
         i = -i;
 
     if(SYLPH_LIKELY(i <= 0x7FFFFF)) {
+        // Branch on best case scenario, less than 23 bits, just store it in data.
         data = i;
         if(negative)
             data |= 0x80000000;
     } else {
-        suint ctr;
+        // If the int doesn't fit in 23 bits, shift right until it does, and
+        // take the amount of shifts as exponent.
+        suint ctr = 0;
         while(i > 0x7FFFFF) {
             ++ctr;
             i >>= 1;

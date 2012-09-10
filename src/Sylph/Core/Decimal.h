@@ -48,7 +48,7 @@ public:
      * Constructor that stores an int as dec32.
      * @param i The int to be stored.
      */
-    Decimal(int i);
+    Decimal(sint i);
 
     /**
      * Constructor that stores the integer part and the real part of a Decimal
@@ -56,7 +56,7 @@ public:
      * @param i The integer part of the decimal number to be stored.
      * @param r The real part of the decimal number to be stored.
      */
-    Decimal(int i, unsigned r);
+    Decimal(sint i, suint r);
 
     /**
      * Constructor to convert float to dec32.
