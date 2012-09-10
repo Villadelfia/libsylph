@@ -24,6 +24,7 @@
  */
 
 #include "../SylphTest.h"
+#include <Sylph/Core/Primitives.h>
 #include <Sylph/Core/Decimal.h>
 #include <Sylph/Core/Debug.h>
 
@@ -34,8 +35,21 @@ namespace {
     class TestDecimal : public ::testing::Test {
     };
 
-    TEST_F(TestDecimal, testStub) {
-        SYLPH_STUB_TEST;
+    TEST_F(TestDecimal, testDefaultCtor) {
+        Decimal d;
+        EXPECT_EQ(0, (int) d);
+    }
+
+    TEST_F(TestDecimal, testSmallInt) {
+        Decimal d(0);
+        EXPECT_EQ(0, (int) d);
+
+        if(sizeof(int) >= 4){
+            for(idx_t i = 0; i < 31; ++i) {
+                Decimal d1(1 << i);
+                EXPECT_EQ(1 << i, (int) d1);
+            }
+        }
     }
 
 } // namespace
