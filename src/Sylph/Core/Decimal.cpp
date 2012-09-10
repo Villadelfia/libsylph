@@ -31,12 +31,19 @@ SYLPH_BEGIN_NAMESPACE
 
 Decimal::Decimal() : data(0u) {}
 
-Decimal::Decimal(int i) {
-    (void) i;
-    SYLPH_STUB;
+Decimal::Decimal(sint i) {
+    bool negative = i < 0;
+    if(negative)
+        i = -i;
+
+    if(i <= 0x7FFFFF) {
+        data = i;
+        if(negative)
+            data |= 0x80000000;
+    }
 }
 
-Decimal::Decimal(int i, unsigned r) {
+Decimal::Decimal(sint i, suint r) {
     (void) i;
     (void) r;
     SYLPH_STUB;
