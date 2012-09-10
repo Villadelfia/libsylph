@@ -32,6 +32,48 @@
 
 SYLPH_BEGIN_NAMESPACE
 
+
+/**
+ * Decimal provides a dec32 according to IEEE754-2008, using the binary
+ * integer significand method. In other words a float stored in base 10.
+ */
+class Decimal {
+public:
+    /**
+     * Default constructor, default stored value is 0.0.
+     */
+    Decimal();
+
+    /**
+     * Constructor that stores an int as dec32.
+     * @param i The int to be stored.
+     */
+    Decimal(int i);
+
+    /**
+     * Constructor that stores the integer part and the real part of a Decimal
+     * number as a dec32.
+     * @param i The integer part of the decimal number to be stored.
+     * @param r The real part of the decimal number to be stored.
+     */
+    Decimal(int i, unsigned r);
+
+    /**
+     * Constructor to convert float to dec32.
+     * @param f The float to be stored.
+     **/
+    Decimal(float f);
+
+    /**
+     * Constructor to convert double to dec32.
+     * @param d The double to be stored.
+     */
+    Decimal(double d);
+
+private:
+    suint data;    
+};
+
 SYLPH_END_NAMESPACE
 
 #endif	/* SYLPH_CORE_DECIMAL_H_ */

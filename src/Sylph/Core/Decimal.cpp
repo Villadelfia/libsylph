@@ -25,8 +25,32 @@
  */
 
 #include "Decimal.h"
+#include "Debug.h"
 
 SYLPH_BEGIN_NAMESPACE
+
+Decimal::Decimal() : data(0u) {}
+
+Decimal::Decimal(int i) {
+    (void) i;
+    SYLPH_STUB;
+}
+
+Decimal::Decimal(int i, unsigned r) {
+    (void) i;
+    (void) r;
+    SYLPH_STUB;
+}
+
+Decimal::Decimal(float f) {
+    (void) f;
+    SYLPH_STUB;
+}
+
+Decimal::Decimal(double d) {
+    (void) d;
+    SYLPH_STUB;
+}
 
 SYLPH_END_NAMESPACE
 
