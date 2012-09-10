@@ -73,7 +73,7 @@ public:
     /**
      * Cast to int.
      **/
-    operator int();
+    operator int() const;
 
 private:
     suint data;    

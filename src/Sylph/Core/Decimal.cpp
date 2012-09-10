@@ -72,7 +72,7 @@ Decimal::Decimal(double d) {
     SYLPH_STUB;
 }
 
-Decimal::operator int() {
+Decimal::operator int() const {
     bool s = data & 0x10000000;
     suint e = (data & 0x7F800000) >> 23;
     suint m = data & 0x7FFFFF;
