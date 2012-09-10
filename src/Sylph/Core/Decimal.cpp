@@ -72,6 +72,19 @@ Decimal::Decimal(double d) {
     SYLPH_STUB;
 }
 
+Decimal::operator int() {
+    bool s = data & 0x10000000;
+    suint e = (data & 0x7F800000) >> 23;
+    suint m = data & 0x7FFFFF;
+    (void) s;
+    (void) e;
+    (void) m;
+
+    return 0;
+    //TODO: Convert to int, clamping to INT_MAX and INT_MIN.
+    SYLPH_STUB;
+}
+
 SYLPH_END_NAMESPACE
 
 // vim: syntax=cpp11:ts=4:sts=4:sw=4:sta:et:tw=80:nobk

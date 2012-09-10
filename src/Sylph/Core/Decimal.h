@@ -70,6 +70,11 @@ public:
      */
     Decimal(double d);
 
+    /**
+     * Cast to int.
+     **/
+    operator int();
+
 private:
     suint data;    
 };
