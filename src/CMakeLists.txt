@@ -1,7 +1,7 @@
 #########################################################################
 #
 # LibSylph Class Library (build script)
-# Copyright (C) 2012 Frank "SeySayux" Erens <seysayux@gmail.com>
+# Copyright (C) 2013 Frank "SeySayux" Erens <seysayux@gmail.com>
 #
 # This software is provided 'as-is', without any express or implied
 # warranty. In no event will the authors be held liable for any damages
@@ -29,10 +29,6 @@ if(SYLPH_DEBUG)
 else()
     add_definitions(${SYLPH_CONFIG_DEFS})
 endif()
-
-if(SYLPH_NO_CXX11)
-    add_definitions(-DSYLPH_NO_CXX0X)
-endif() 
 
 include(SourcesList.txt)
 

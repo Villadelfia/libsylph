@@ -1,6 +1,6 @@
 /*
  * LibSylph Class Library
- * Copyright (C) 2012 Frank "SeySayux" Erens <seysayux@gmail.com>
+ * Copyright (C) 2013 Frank "SeySayux" Erens <seysayux@gmail.com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -47,4 +47,4 @@ int SylphMain(int argc, char** argv) {
     return RUN_ALL_TESTS();
 }
 
-// vim: syntax=cpp11:ts=4:sts=4:sw=4:sta:et:tw=80:nobk:pa+=,../src
+// vim: ts=4:sts=4:sw=4:sta:et:tw=80:nobk:path=../../src

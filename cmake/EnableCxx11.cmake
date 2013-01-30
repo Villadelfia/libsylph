@@ -1,7 +1,7 @@
 #########################################################################
 #
 # LibSylph Class Library (build script)
-# Copyright (C) 2012 Frank "SeySayux" Erens <seysayux@gmail.com>
+# Copyright (C) 2013 Frank "SeySayux" Erens <seysayux@gmail.com>
 #
 # This software is provided 'as-is', without any express or implied
 # warranty. In no event will the authors be held liable for any damages
@@ -25,20 +25,24 @@
 #########################################################################
 
 # Flags to enable C++11
-if(CMAKE_COMPILER_IS_CLANG)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     # Clang
-    if(NOT SYLPH_NO_CXX11)
-        set(SYLPH_CXXFLAGS "-std=c++11 -stdlib=libc++" )
-    endif()
-elseif(CMAKE_COMPILER_IS_GNUCC)
+    set(CMAKE_CXX_FLAGS 
+        "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++" )
+    set(CMAKE_EXE_LINKER_FLAGS 
+        "-std=c++11 -stdlib=libc++")
+    set(CMAKE_SHARED_LINKER_FLAGS 
+        "-std=c++11 -stdlib=libc++")
+    set(CMAKE_MODULE_LINKER_FLAGS 
+        "-std=c++11 -stdlib=libc++")
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     # GCC >= 4.5.3
     # GCC is pretty schizophrenic when it comes to the name of the new C++
     # standard...
-    if(NOT SYLPH_NO_CXX11)
-        if(GCC_VERSION STRGREATER "4.7.0")
-            set(SYLPH_CXXFLAGS "-std=c++11")
-        else(GCC_VERSION STRGREATER "4.5.2")
-            set(SYLPH_CXXFLAGS "-std=c++0x")
-        endif()
+    if(CMAKE_CXX_COMPILER_VERSION STRGREATER "4.7./")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    else(CMAKE_CXX_COMPILER_VERSION STRGREATER "4.5.2")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
     endif()
 endif()
+

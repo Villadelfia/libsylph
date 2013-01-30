@@ -1,6 +1,6 @@
 /*
  * LibSylph Class Library
- * Copyright (C) 2012 Frank "SeySayux" Erens <seysayux@gmail.com>
+ * Copyright (C) 2013 Frank "SeySayux" Erens <seysayux@gmail.com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -31,20 +31,21 @@
 #include "String.h"
 #include "Iterator.h"
 #include "Iterable.h"
+#include "Debug.h"
 
 SYLPH_BEGIN_NAMESPACE
 
 // chmod constants
-const suint S_MOD_OWN = 0x100;
-const suint S_MOD_GRP = 0x010;
-const suint S_MOD_OTH = 0x001;
-const suint S_MOD_ALL = 0x111;
+const uint32_t S_MOD_OWN = 0x100;
+const uint32_t S_MOD_GRP = 0x010;
+const uint32_t S_MOD_OTH = 0x001;
+const uint32_t S_MOD_ALL = 0x111;
 
-const suint S_MOD_N = 0x8;
-const suint S_MOD_R = 0x4;
-const suint S_MOD_W = 0x2;
-const suint S_MOD_X = 0x1;
-const suint S_MOD_K = 0x0;
+const uint32_t S_MOD_N = 0x8;
+const uint32_t S_MOD_R = 0x4;
+const uint32_t S_MOD_W = 0x2;
+const uint32_t S_MOD_X = 0x1;
+const uint32_t S_MOD_K = 0x0;
 
 /**
  * File represents the path to a file.
@@ -62,7 +63,11 @@ public:
     public:
         typedef BidirectionalIterator<V,S_ITERATOR<C,V> > super;
 
-        S_ITERATOR(bool begin = false, C* obj = null);
+        S_ITERATOR(bool begin = false, C* obj = null) : super(begin) {
+            file = obj;
+            pos = begin ? 0 : file->path.length() - 1;
+            if(begin) next();
+        }
 
         typename super::value_type& current() {
             return cur;
@@ -72,8 +77,34 @@ public:
             return cur;
         }
 
-        void next();
-        bool hasNext() const;
+        void next() {
+            sidx_t start = 0;
+            if (pos == 0) {
+                start = 1;
+            } else {
+                start = file->path.indexOf(File::Separator, pos);
+                if (start == -1) {
+                    pos = file->path.length();
+                    return;
+                } else {
+                    ++start;
+                }
+            }
+
+            sidx_t end = file->path.indexOf(File::Separator, start);
+            if (end == -1) {
+                end = file->path.length();
+            }
+
+            --end;
+
+            cur = file->path.substring(start, end);
+            pos = end;
+        }
+
+        bool hasNext() const {
+            return pos < file->path.length() - 1;
+        }
 
         template<class C1, class V1>
         bool equals(const S_ITERATOR<C1,V1>& other) const {
@@ -86,8 +117,14 @@ public:
             cur = other.cur;
             pos = other.pos;
         }
-        bool hasPrevious() const;
-        void previous();
+
+        bool hasPrevious() const {
+            return pos != 0;
+        }        
+
+        void previous() {
+            SYLPH_STUB;
+        }
     //private:
         C* file;
         String cur;
@@ -262,7 +299,7 @@ public:
     bool isDirectory() const throw(IOException);
 
     /** */
-    bool chmod(suint mode, bool sylphmode = false) const throw(IOException);
+    bool chmod(uint32_t mode, bool sylphmode = false) const throw(IOException);
 
     /** */
     Array<File> contents() const throw(IOException);
@@ -335,5 +372,4 @@ SYLPH_END_NAMESPACE
 
 #endif	/* SYLPH_CORE_FILE_H_ */
 
-
-// vim: syntax=cpp11:ts=4:sts=4:sw=4:sta:et:tw=80:nobk
+// vim: ts=4:sts=4:sw=4:sta:et:tw=80:nobk

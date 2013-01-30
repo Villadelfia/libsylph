@@ -1,6 +1,6 @@
 /*
  * LibSylph Class Library
- * Copyright (C) 2012 Frank "SeySayux" Erens <seysayux@gmail.com>
+ * Copyright (C) 2013 Frank "SeySayux" Erens <seysayux@gmail.com>
  * Copyright (C) 2010 Scott "ernieballsep" Philbrook <ernieballsep@gmail.com>
  *
  * This software is provided 'as-is', without any express or implied
@@ -216,7 +216,7 @@ namespace {
         // initialize random seed: 
   	    srand(time(null));
 
-        for(std::size_t x = 0; x < 1000; x++) {
+        for(size_t x = 0; x < 1000; x++) {
             int randomnumber = rand() % 10 + 1;
             testObj1.add(randomnumber);
             testObj2.add(randomnumber + 1);
@@ -251,7 +251,7 @@ namespace {
     TEST_F(TestVector, testReverseIterator) {
         idx_t cur = 1000u;
         Vector<int> testObj1 ((size_t) 5);
-        for(std::size_t x = 0; x < 1000; x++) {
+        for(size_t x = 0; x < 1000; x++) {
             testObj1.add(x);
         }
 
@@ -305,5 +305,4 @@ namespace {
 
 } // namespace
 
-
-// vim: syntax=cpp11:ts=4:sts=4:sw=4:sta:et:tw=80:nobk:pa+=,../../src
+// vim: ts=4:sts=4:sw=4:sta:et:tw=80:nobk:path=../../../src

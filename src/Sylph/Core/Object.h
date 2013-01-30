@@ -1,6 +1,6 @@
 /*
  * LibSylph Class Library
- * Copyright (C) 2012 Frank "SeySayux" Erens <seysayux@gmail.com>
+ * Copyright (C) 2013 Frank "SeySayux" Erens <seysayux@gmail.com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -33,6 +33,7 @@
 #define SYLPH_END_NAMESPACE }
 
 #include <cstddef>
+#include <new>
 
 /**
  * \namespace Sylph
@@ -93,8 +94,8 @@ class DeserializationBuffer;
  * for a particular object, GC is enabled by default.
  */
 enum GCPlacement {
-    UseGC, /**< Use the garbage collector; this is the default. */
-    NoGC, /**< Do not use the garbage collector for this specific object. */
+    GC, /**< Use the garbage collector for this specific object. */
+    NoGC, /**< Do not use the garbage collector; this is the default. */
     PointerFreeGC /**< When the object you create does not contain pointers,
                    * use this to speed up GC -- however, this is usually not
                    * useful, as most LibSylph containers contain pointers. */
@@ -136,7 +137,18 @@ private:
 #endif
 };
 
-#ifndef SYLPH_NO_CXX0X
+// This is used to prevent exposing libgc's header files to LibSylph clients.
+namespace GCInternal {
+    void* gc_malloc(size_t);
+    void gc_register_finalizer(void(*)(void*, void*));
+    void gc_free(void*);
+}
+
+// Undocumented, do not use directly! 
+template<class T> void cleanupgc(void* obj, void* displ) {
+    ((T*) ((char*)obj + (ptrdiff_t)displ))->~T();
+}
+
 /**
  * Creates a new (non-LibSylph) object using the LibSylph garbage
  * collection. Example (using Qt):
@@ -145,10 +157,44 @@ private:
  * </pre>
  * The syntax is very similar to that of the normal new operator.
  *
+ * @param args Arguments to @em T's constructor.
+ * @return A newly constructed object of type @em T with arguments @em args
+ * @throw std::bad_alloc if an error occured during allocation.
  * @tplreqs T Constructible with @em Args
  * @tplreqs Args none
  */
-template<class T, class... Args> T * newgc(const Args&... args);
+template<class T, class... Args>
+T* newgc(const Args&... args) {
+    T* tr = GCInternal::gc_malloc(sizeof(T));
+    if(!tr) throw std::bad_alloc();
+
+    tr = new(tr) T(args...);
+
+    GCInternal::gc_register_finalizer(tr, cleanupgc<T>);
+
+    return tr;
+}
+
+/**
+ * The nothrow version of newgc. Does not throw, returns a null pointer instead.
+ *
+ * @param args Arguments to @em T's constructor.
+ * @return A newly constructed object of type @em T with arguments @em args, or
+ * null.
+ * @tplreqs T Constructible with @em Args
+ * @tplreqs Args none
+ */
+template<class T, class... Args>
+T* newgc_nothrow(const Args&... args) {
+    T* tr = GCInternal::gc_malloc(sizeof(T));
+    if(!tr) return tr;
+
+    tr = new(tr) T(args...);
+
+    GCInternal::gc_register_finalizer(tr, cleanupgc<T>);
+
+    return tr;
+}
 
 /**
  * Deletes a (non-LibSylph) object that was previously allocated with LibSylph
@@ -162,13 +208,12 @@ template<class T, class... Args> T * newgc(const Args&... args);
  * @param t pointer to a class previously allocated with @c newgc
  * @tplreqs T none
  */
-template<class T> void deletegc(const T * t);
-// Undocumented, do not use directly! 
-template<class T> void cleanupgc(void *obj, void *displ);
-#endif
+template<class T> void deletegc(const T* t) {
+    GCInternal::gc_free(t);
+}
+
 SYLPH_END_NAMESPACE
 
 #endif	/* SYLPH_CORE_OBJECT_H_ */
 
-
-// vim: syntax=cpp11:ts=4:sts=4:sw=4:sta:et:tw=80:nobk
+// vim: ts=4:sts=4:sw=4:sta:et:tw=80:nobk

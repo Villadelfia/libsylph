@@ -1,6 +1,6 @@
 /*
  * LibSylph Class Library
- * Copyright (C) 2012 Frank "SeySayux" Erens <seysayux@gmail.com>
+ * Copyright (C) 2013 Frank "SeySayux" Erens <seysayux@gmail.com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -50,7 +50,7 @@ void StringBuffer::deleteSubstring(idx_t start, idx_t end) {
 }
 
 void StringBuffer::clear() {
-    buf = Array<uchar>((std::size_t)16);
+    buf = Array<uchar>((size_t)16);
     _length = 0;
 }
 
@@ -96,19 +96,19 @@ StringBuffer& StringBuffer::operator<<(Array<uchar> c) {
     return *this;
 }
 
-StringBuffer& StringBuffer::operator<<(sint i) {
+StringBuffer& StringBuffer::operator<<(int32_t i) {
     return *this<<(String(i));
 }
 
-StringBuffer& StringBuffer::operator<<(suint i) {
+StringBuffer& StringBuffer::operator<<(uint32_t i) {
     return *this<<(String(i));
 }
 
-StringBuffer& StringBuffer::operator<<(slong l) {
+StringBuffer& StringBuffer::operator<<(int64_t l) {
     return *this<<(String(l));
 }
 
-StringBuffer& StringBuffer::operator<<(sulong l) {
+StringBuffer& StringBuffer::operator<<(uint64_t l) {
     return *this<<(String(l));
 }
 
@@ -138,7 +138,7 @@ StringBuffer::operator String() const {
     return toString();
 }
 
-void StringBuffer::ensureCapacity(std::size_t capacity) {
+void StringBuffer::ensureCapacity(size_t capacity) {
     if(buf.length > capacity) return;
 
     size_t newsize = buf.length;
@@ -149,4 +149,4 @@ void StringBuffer::ensureCapacity(std::size_t capacity) {
 }
 SYLPH_END_NAMESPACE
 
-// vim: syntax=cpp11:ts=4:sts=4:sw=4:sta:et:tw=80:nobk
+// vim: ts=4:sts=4:sw=4:sta:et:tw=80:nobk

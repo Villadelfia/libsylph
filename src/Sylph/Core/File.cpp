@@ -1,6 +1,6 @@
 /*
  * LibSylph Class Library
- * Copyright (C) 2012 Frank "SeySayux" Erens <seysayux@gmail.com>
+ * Copyright (C) 2013 Frank "SeySayux" Erens <seysayux@gmail.com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -333,7 +333,7 @@ bool File::isDirectory() const throw(IOException) {
 #endif
 }
 
-bool File::chmod(suint mode, bool sylphmode) const throw(IOException) {
+bool File::chmod(uint32_t mode, bool sylphmode) const throw(IOException) {
 #ifdef SYLPH_OS_WINDOWS
     // windows doesn't support chmodding. ever.
     return false;
@@ -346,10 +346,10 @@ bool File::chmod(suint mode, bool sylphmode) const throw(IOException) {
         struct stat info;
         int ret = stat(path, &info);
         if (ret == -1) sthrow(IOException, strerror(errno));
-        suint permnow = info.st_mode;
-        suint newperm = 0;
+        uint32_t permnow = info.st_mode;
+        uint32_t newperm = 0;
 
-        suint owner = mode & S_MOD_OWN;
+        uint32_t owner = mode & S_MOD_OWN;
         if (owner >= 0x800) {
             newperm |= (permnow & 0700);
         }
@@ -359,7 +359,7 @@ bool File::chmod(suint mode, bool sylphmode) const throw(IOException) {
 
         // same for group and world
 
-        suint group = mode & S_MOD_GRP;
+        uint32_t group = mode & S_MOD_GRP;
         if (group >= 0x80) {
             newperm |= (permnow & 070);
         }
@@ -367,7 +367,7 @@ bool File::chmod(suint mode, bool sylphmode) const throw(IOException) {
         if (mode & S_MOD_W * S_MOD_GRP) newperm |= 020;
         if (mode & S_MOD_X * S_MOD_GRP) newperm |= 010;
 
-        suint world = mode & S_MOD_OTH;
+        uint32_t world = mode & S_MOD_OTH;
         if (world >= 0x8) {
             newperm |= (permnow & 07);
         }
@@ -480,56 +480,6 @@ File& File::append(const String rhs, bool initial) {
     return *this;
 }
 
-// iterator
-
-template<class C, class V>
-File::S_ITERATOR<C,V>::S_ITERATOR(bool begin, C* obj) : super(begin) {
-    file = obj;
-    pos = begin ? 0 : file->path.length() - 1;
-    if (begin) next();
-}
-
-template<class C, class V>
-void File::S_ITERATOR<C,V>::next() {
-    sidx_t start = 0;
-    if (pos == 0) {
-        start = 1;
-    } else {
-        start = file->path.indexOf(File::Separator, pos);
-        if (start == -1) {
-            pos = file->path.length();
-            return;
-        } else {
-            ++start;
-        }
-    }
-
-    sidx_t end = file->path.indexOf(File::Separator, start);
-    if (end == -1) {
-        end = file->path.length();
-    }
-
-    --end;
-
-    cur = file->path.substring(start, end);
-    pos = end;
-}
-
-template<class C, class V>
-bool File::S_ITERATOR<C,V>::hasNext() const {
-    return pos < file->path.length() - 1;
-}
-
-template<class C, class V>
-bool File::S_ITERATOR<C,V>::hasPrevious() const {
-    return pos != 0;
-}
-
-template<class C, class V>
-void File::S_ITERATOR<C,V>::previous() {
-    SYLPH_STUB;
-}
-
 SYLPH_END_NAMESPACE
 
-// vim: syntax=cpp11:ts=4:sts=4:sw=4:sta:et:tw=80:nobk
+// vim: ts=4:sts=4:sw=4:sta:et:tw=80:nobk

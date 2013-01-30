@@ -1,6 +1,6 @@
 /*
  * LibSylph Class Library
- * Copyright (C) 2012 Frank "SeySayux" Erens <seysayux@gmail.com>
+ * Copyright (C) 2013 Frank "SeySayux" Erens <seysayux@gmail.com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -189,7 +189,7 @@ public:
      * @param h A suitable hash function
      * @param e A suitable equals function.
      */
-    explicit HashMap(std::size_t initialCapacity = 11, float _loadFactor = .75f,
+    explicit HashMap(size_t initialCapacity = 11, float _loadFactor = .75f,
             HashFunction h = Hash<Key>(), EqualsFunction e = Equals<Value*>())
     : loadFactor(_loadFactor), _size(0), buckets(initialCapacity),
     threshold(initialCapacity*loadFactor), hashf(h), equf(e) {
@@ -288,7 +288,7 @@ public:
      * @return The amount of entries in this HashMap.
      * @complexity O(0)
      */
-    std::size_t size() const {
+    size_t size() const {
         return _size;
     }
 
@@ -442,13 +442,13 @@ public:
 
 private:
     float loadFactor;
-    std::size_t _size;
+    size_t _size;
     Array<EntryPtr> buckets;
-    std::size_t threshold;
+    size_t threshold;
     HashFunction hashf;
     EqualsFunction equf;
 
-    sint hash(const Key& key) const {
+    int32_t hash(const Key& key) const {
         return abs(hashf(key) % buckets.length);
     }
 
@@ -493,5 +493,4 @@ bool operator==(const HashMap<K,V,H,E>& lhs, const HashMap<K,V,H,E>& rhs) {
 SYLPH_END_NAMESPACE
 #endif	/* SYLPH_CORE_HASHMAP_H_ */
 
-
-// vim: syntax=cpp11:ts=4:sts=4:sw=4:sta:et:tw=80:nobk
+// vim: ts=4:sts=4:sw=4:sta:et:tw=80:nobk

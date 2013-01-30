@@ -1,6 +1,6 @@
 /*
  * LibSylph Class Library
- * Copyright (C) 2012 Frank "SeySayux" Erens <seysayux@gmail.com>
+ * Copyright (C) 2013 Frank "SeySayux" Erens <seysayux@gmail.com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -37,9 +37,7 @@
 #include <algorithm>
 #include <iostream>
 
-#ifndef SYLPH_NO_CXX0X
 #include <initializer_list>
-#endif
 
 SYLPH_BEGIN_NAMESPACE
 class Any;
@@ -152,7 +150,7 @@ public:
      * @param length The length of the original C array
      * @param orig The original C array, supplied as a pointer.
      */
-    inline static Array<T> fromPointer(std::size_t length, T * orig) {
+    inline static Array<T> fromPointer(size_t length, T * orig) {
         Array<T> ar(length);
         for (idx_t x = 0; x < length; x++)ar[x] = orig[x];
         return ar;
@@ -165,11 +163,10 @@ public:
      * internal C array is allocated to have the specified length.
      * @param len The length of the new Array.
      */
-    explicit Array(std::size_t len = 0) : _length(len), length(_length),
+    explicit Array(size_t len = 0) : _length(len), length(_length),
             data(new Data(len)) {
     }
 
-#ifndef SYLPH_NO_CXX0X
     /**
      * Creates an Array from an intializer list. This constructor allows the
      * easier, more familiar syntax of Array creation, but requires C++11. Using
@@ -187,7 +184,6 @@ public:
             data->_carray[i] = il.begin()[i];
         }
     }
-#endif
 
     /**
      * Creates an Array from an existing C-style array. Note that you can only
@@ -287,7 +283,7 @@ public:
      * @return A new Array containing the same data as this Array.
      */
     Array<T> copy() const {
-        Array<T> toReturn((std::size_t)length);
+        Array<T> toReturn((size_t)length);
         for (idx_t i = 0; i < length; i++) {
             toReturn[i] = (*this)[i];
         }
@@ -466,7 +462,7 @@ protected:
         }
         const size_t _length;
         T * _carray;
-        suint refcount;
+        uint32_t refcount;
     } * data;
 #endif
 };
@@ -539,5 +535,4 @@ SYLPH_END_NAMESPACE
 #endif	/* SYLPH_CORE_ARRAY_H_ */
 
 
-
-// vim: syntax=cpp11:ts=4:sts=4:sw=4:sta:et:tw=80:nobk
+// vim: ts=4:sts=4:sw=4:sta:et:tw=80:nobk

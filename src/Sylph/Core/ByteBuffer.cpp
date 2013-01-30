@@ -1,6 +1,6 @@
 /*
  * LibSylph Class Library
- * Copyright (C) 2012 Frank "SeySayux" Erens <seysayux@gmail.com>
+ * Copyright (C) 2013 Frank "SeySayux" Erens <seysayux@gmail.com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -176,7 +176,7 @@ ByteBuffer& ByteBuffer::operator=(const ByteBuffer & orig) {
 
 Array<byte> ByteBuffer::toArray() {
     Array<byte> toReturn = Array<byte>(_size);
-    arraycopy(_array, 0, toReturn, 0, std::size_t(_size));
+    arraycopy(_array, 0, toReturn, 0, size_t(_size));
 
     return toReturn;
 }
@@ -231,4 +231,4 @@ InputStream & operator>>(InputStream& in, ByteBuffer& buf) {
 }
 SYLPH_END_NAMESPACE
 
-// vim: syntax=cpp11:ts=4:sts=4:sw=4:sta:et:tw=80:nobk
+// vim: ts=4:sts=4:sw=4:sta:et:tw=80:nobk
